@@ -1,14 +1,32 @@
 var viewerApp;
 
 function launchViewer(urn) {
+    if (viewerApp != null) {
+        var thisviewer = viewerApp.getCurrentViewer();
+        if (thisviewer) {
+            thisviewer.tearDown()
+            thisviewer.finish()
+            thisviewer = null
+            $("#forgeViewer").empty();
+        }        
+    }
+
     var options = {
-        env: 'AutodeskProduction',
+        env : 'AutodeskProduction',
         getAccessToken: getForgeToken
     };
     var documentId = 'urn:' + urn;
     Autodesk.Viewing.Initializer(options, function onInitialized() {
         viewerApp = new Autodesk.Viewing.ViewingApplication('forgeViewer');
-        viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D, { extensions: ['HandleSelectionExtension', 'ModelSummaryExtension'] });
+        viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D, {
+            extensions: [
+                'MyAwesomeExtension',
+                'HandleSelectionExtension',
+                'ModelSummaryExtension',
+                'SharingViewer',
+                'SpaceSummaryExtension'
+            ]
+            });
         viewerApp.loadDocument(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
     });
 }
@@ -19,7 +37,7 @@ function onDocumentLoadSuccess(doc) {
     // which references the root node of a graph that wraps each object from the Manifest JSON.
     var viewables = viewerApp.bubble.search({ 'type': 'geometry' });
     if (viewables.length === 0) {
-        console.error('Document contains no viewables.');
+        console.error('Document contains no viewable.');
         return;
     }
 
@@ -36,14 +54,14 @@ function onItemLoadSuccess(viewer, item) {
 }
 
 function onItemLoadFail(errorCode) {
-    console.error('onItemLoadFail() - errorCode:' + errorCode);
+    console.error('onItemLoadFail() - errorCode():' + errorCode);
 }
 
 function getForgeToken(callback) {
-    jQuery.ajax({
+    $.ajax({
         url: '/api/forge/oauth/token',
         success: function (res) {
-        callback(res.access_token, res.expires_in)
+            callback(res.access_token, res.expires_in)
         }
     });
 }

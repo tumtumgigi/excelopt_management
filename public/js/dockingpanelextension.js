@@ -6,7 +6,7 @@ function ModelSummaryPanel(viewer, container, id, title, options) {
     this.viewer = viewer;
     Autodesk.Viewing.UI.PropertyPanel.call(this, container, id, title, options);
 }
-ModelSummaryPanel.prototype = Object.create(Autodesk.Viewing.UI.PropertyPanel.prototype)
+ModelSummaryPanel.prototype = Object.create(Autodesk.Viewing.UI.PropertyPanel.prototype);
 ModelSummaryPanel.prototype.constructor = ModelSummaryPanel;
 
 function ModelSummaryExtension(viewer, options) {
@@ -118,7 +118,7 @@ ModelSummaryExtension.prototype.unload = function () {
     return true;
 };
 
-ModelSummaryExtension.prototype.getAllLeafComponents = function(callback) {
+ModelSummaryExtension.prototype.getAllLeafComponents = function (callback) {
     var cbCount = 0; // count pending callbacks
     var components = []; //store the results
     var tree; // the instance tree
@@ -136,7 +136,7 @@ ModelSummaryExtension.prototype.getAllLeafComponents = function(callback) {
     }
     this.viewer.getObjectTree(function (objectTree) {
         tree = objectTree;
-        var getAllLeafComponents = getLeafComponentsRec(tree.getRootId());
+        var allLeafComponents = getLeafComponentsRec(tree.getRootId());
     });
 };
 

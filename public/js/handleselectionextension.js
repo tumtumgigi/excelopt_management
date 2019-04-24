@@ -33,7 +33,7 @@ HandleSelectionExtension.prototype.createUI = function () {
     var handleSelectionToolbarButton = new Autodesk.Viewing.UI.Button('handleSelectionButton');
     handleSelectionToolbarButton.onClick = function (e) {
 
-        /// get current selection
+// get current selection
 var selection = _this.viewer.getSelection();
 _this.viewer.clearSelection();
 // anything selected?
